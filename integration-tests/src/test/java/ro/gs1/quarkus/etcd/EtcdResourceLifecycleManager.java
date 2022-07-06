@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.jboss.logging.Logger;
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
-import org.testcontainers.utility.DockerImageName;
 
 import io.etcd.jetcd.launcher.Etcd;
 import io.etcd.jetcd.launcher.EtcdCluster;

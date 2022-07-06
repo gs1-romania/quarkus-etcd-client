@@ -26,13 +26,6 @@
 
    </dependencies>
    <build>
-      <extensions>
-         <extension>
-            <groupId>kr.motd.maven</groupId>
-            <artifactId>os-maven-plugin</artifactId>
-            <version>${os.maven.version}</version>
-         </extension>
-      </extensions>
       <plugins>
          <plugin>
             <groupId>io.quarkus</groupId>
@@ -45,6 +38,22 @@
                      <goal>generate-code</goal>
                      <goal>generate-code-tests</goal>
                   </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-bootstrap-maven-plugin</artifactId>
+            <version>${quarkus.version}</version>
+            <executions>
+               <execution>
+                  <phase>compile</phase>
+                  <goals>
+                     <goal>extension-descriptor</goal>
+                  </goals>
+                  <configuration>
+                     <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}</deployment>
+                  </configuration>
                </execution>
             </executions>
          </plugin>

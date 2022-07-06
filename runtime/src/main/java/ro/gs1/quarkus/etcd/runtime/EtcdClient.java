@@ -27,7 +27,7 @@ public class EtcdClient {
    public void put(String key, String value) {
       PutRequest putRequest = PutRequest.newBuilder().setKey(ByteString.copyFrom(key.getBytes(Charset.defaultCharset()))).setValue(ByteString.copyFrom(value.getBytes(Charset.defaultCharset()))).build();
       PutResponse putResponse = kvBlockingStub.put(putRequest);
-      logger.infov("Put key: {0} with value: {1}", putResponse.getPrevKv().getKey().toString(Charset.defaultCharset()), putResponse.getPrevKv().getValue().toString(Charset.defaultCharset()));
+      logger.infov("Put key: {0} with value: {1}", key, value);
    }
 
    public Map<String, String> readPrefix(String key) {

@@ -15,6 +15,14 @@
       <artifactId>quarkus-arc-deployment</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-grpc-deployment</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-resteasy-reactive-deployment</artifactId>
+    </dependency>
+    <dependency>
       <groupId>ro.gs1.quarkus-etcd</groupId>
       <artifactId>quarkus-etcd</artifactId>
       <version>${project.version}</version>
