@@ -16,6 +16,40 @@
     <module>deployment</module>
     <module>runtime</module>
   </modules>
+    <distributionManagement>
+      <repository>
+         <id>github</id>
+         <name>GitHub GS1 Apache Maven Packages</name>
+         <url>https://maven.pkg.github.com/gs1-romania/quarkus-etcd</url>
+      </repository>
+      <snapshotRepository>
+         <id>github</id>
+         <name>GitHub GS1 Apache Maven Packages snapshots</name>
+         <url>https://maven.pkg.github.com/gs1-romania/quarkus-etcd</url>
+      </snapshotRepository>
+   </distributionManagement>
+   <repositories>
+      <repository>
+         <id>github</id>
+         <url>https://maven.pkg.github.com/gs1-romania/quarkus-etcd</url>
+         <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+      </repository>
+   </repositories>
+   <developers>
+      <developer>
+         <id>liviu</id>
+         <name>Liviu Gabriel Savu</name>
+         <email>liviu.savu@gs1.ro</email>
+         <organization>GS1 ROMANIA</organization>
+         <organizationUrl>https://www.gs1.ro</organizationUrl>
+         <timezone>+2</timezone>
+      </developer>
+   </developers>
   <properties>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.release>11</maven.compiler.release>
