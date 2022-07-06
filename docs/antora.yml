@@ -1,0 +1,5 @@
+name: quarkus-etcd
+title: Quarkus - Etcd
+version: dev
+nav:
+  - modules/ROOT/nav.adoc
