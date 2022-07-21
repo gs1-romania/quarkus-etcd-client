@@ -7,12 +7,7 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
-  release:
-    types: [created]
-
+      
 jobs:
   build:
 
@@ -57,12 +52,6 @@ jobs:
 
     - name: Build with Maven
       run: mvn -s $GITHUB_WORKSPACE/.github/workflows/maven-settings.xml -B package --file pom.xml -q
-      env:
-        USER_NAME: ${{ secrets.USER_NAME }}
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-
-    - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/.github/workflows/maven-settings.xml -Dmaven.test.skip=true -q
       env:
         USER_NAME: ${{ secrets.USER_NAME }}
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
