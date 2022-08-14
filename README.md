@@ -1,3 +1,3 @@
 # Quarkus - Etcd
 
-Wrapper for ETCD.
+Wrapper for ETCD using Quarkus GRPC.
