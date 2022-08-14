@@ -41,8 +41,8 @@ jobs:
           
       - name: Configure Git author
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "liviu.savu@gs1.ro"
+          git config --local user.name "Liviu Gabriel Savu"
       - name: Maven release
         run: |
           git checkout -b release-${{ github.event.inputs.releaseVersion }}
