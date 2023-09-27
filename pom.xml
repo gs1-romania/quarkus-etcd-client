@@ -3,16 +3,11 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <modelVersion>4.0.0</modelVersion>
-   <parent>
-      <groupId>io.quarkiverse</groupId>
-      <artifactId>quarkiverse-parent</artifactId>
-      <version>10</version>
-   </parent>
-   <groupId>ro.gs1.quarkus-etcd</groupId>
-   <artifactId>quarkus-etcd-parent</artifactId>
-   <version>1.0.0-SNAPSHOT</version>
+   <groupId>ro.gs1.quarkus</groupId>
+   <artifactId>quarkus-etcd-client-parent</artifactId>
+   <version>1.0-SNAPSHOT</version>
    <packaging>pom</packaging>
-   <name>Quarkus - Etcd - Parent</name>
+   <name>Quarkus - etcd Client - Parent</name>
    <modules>
       <module>deployment</module>
       <module>runtime</module>
@@ -87,7 +82,6 @@
                <version>3.0.0-M6</version>
                <configuration>
                   <scmCommentPrefix>[ci skip]</scmCommentPrefix>
-                  <testFailureIgnore>true</testFailureIgnore>
                </configuration>
             </plugin>
             <plugin>

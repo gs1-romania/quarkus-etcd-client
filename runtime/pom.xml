@@ -4,12 +4,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
    <modelVersion>4.0.0</modelVersion>
    <parent>
-      <groupId>ro.gs1.quarkus-etcd</groupId>
-      <artifactId>quarkus-etcd-parent</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <groupId>ro.gs1.quarkus</groupId>
+      <artifactId>quarkus-etcd-client-parent</artifactId>
+      <version>1.0-SNAPSHOT</version>
    </parent>
-   <artifactId>quarkus-etcd</artifactId>
-   <name>Quarkus - Etcd - Runtime</name>
+   <artifactId>quarkus-etcd-client</artifactId>
+   <name>Quarkus - etcd Client - Runtime</name>
    <dependencies>
       <dependency>
          <groupId>io.quarkus</groupId>
@@ -32,7 +32,6 @@
             <version>3.0.0-M6</version>
             <configuration>
                <scmCommentPrefix>[ci skip]</scmCommentPrefix>
-               <testFailureIgnore>true</testFailureIgnore>
             </configuration>
          </plugin>
          <plugin>
