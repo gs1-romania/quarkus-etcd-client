@@ -21,7 +21,7 @@ import "rpc.proto";
 package v3lockpb;
 
 option java_multiple_files = true;
-option java_package = "ro.gs1.quarkus.etcd.api.lock";
+option java_package = "ro.gs1.quarkus.etcd.grpc.lock";
 option java_outer_classname = "EtcdProto";
 option objc_class_prefix = "Etcd";
 

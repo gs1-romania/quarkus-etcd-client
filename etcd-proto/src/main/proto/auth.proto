@@ -19,7 +19,7 @@ syntax = "proto3";
 package authpb;
 
 option java_multiple_files = true;
-option java_package = "ro.gs1.quarkus.etcd.api.auth";
+option java_package = "ro.gs1.quarkus.etcd.grpc.auth";
 
 // User is a single entry in the bucket authUsers
 message User {

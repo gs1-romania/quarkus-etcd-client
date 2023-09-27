@@ -9,7 +9,7 @@
       <version>1.0-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
-   <artifactId>quarkus-etcd-deployment</artifactId>
+   <artifactId>quarkus-etcd-client-deployment</artifactId>
    <name>Quarkus - etcd Client - Deployment</name>
    <dependencies>
       <dependency>
@@ -51,7 +51,7 @@
                   <path>
                      <groupId>io.quarkus</groupId>
                      <artifactId>quarkus-extension-processor</artifactId>
-                     <version>${quarkus.version}</version>
+                     <version>${quarkus.platform.version}</version>
                   </path>
                </annotationProcessorPaths>
             </configuration>

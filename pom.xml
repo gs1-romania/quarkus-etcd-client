@@ -11,6 +11,7 @@
    <modules>
       <module>deployment</module>
       <module>runtime</module>
+      <module>etcd-proto</module>
    </modules>
    <distributionManagement>
       <repository>
@@ -53,22 +54,28 @@
       </developer>
    </developers>
    <properties>
-      <compiler-plugin.version>3.8.1</compiler-plugin.version>
+      <compiler-plugin.version>3.11.0</compiler-plugin.version>
+      <failsafe-plugin.version>${surefire-plugin.version}</failsafe-plugin.version>
       <maven.compiler.release>11</maven.compiler.release>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-      <quarkus.version>2.10.1.Final</quarkus.version>
+      <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+      <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+      <quarkus.platform.version>3.4.1</quarkus.platform.version>
+      <protobuf.maven.plugin.version>0.6.1</protobuf.maven.plugin.version>
+      <surefire-plugin.version>3.0.0</surefire-plugin.version>
       <grpc.version>1.47.0</grpc.version>
       <protoc.version>3.21.2</protoc.version>
-      <os.maven.version>1.7.0</os.maven.version>
+      <os.maven.plugin.version>1.7.0</os.maven.plugin.version>
+      <!-- TODO: Remove jetcd -->
       <jetcd.version>0.7.3</jetcd.version>
    </properties>
    <dependencyManagement>
       <dependencies>
          <dependency>
-            <groupId>io.quarkus.platform</groupId>
-            <artifactId>quarkus-bom</artifactId>
-            <version>2.11.2.Final</version>
+            <groupId>${quarkus.platform.group-id}</groupId>
+            <artifactId>${quarkus.platform.artifact-id}</artifactId>
+            <version>${quarkus.platform.version}</version>
             <type>pom</type>
             <scope>import</scope>
          </dependency>
@@ -79,7 +86,7 @@
          <plugins>
             <plugin>
                <artifactId>maven-release-plugin</artifactId>
-               <version>3.0.0-M6</version>
+               <version>3.0.1</version>
                <configuration>
                   <scmCommentPrefix>[ci skip]</scmCommentPrefix>
                </configuration>
@@ -88,14 +95,28 @@
                <groupId>io.quarkus</groupId>
                <artifactId>quarkus-maven-plugin</artifactId>
                <version>${quarkus.version}</version>
-               <extensions>true</extensions>
-               <executions>
-                  <execution>
-                     <goals>
-                        <goal>build</goal>
-                     </goals>
-                  </execution>
-               </executions>
+            </plugin>
+            <plugin>
+               <artifactId>maven-surefire-plugin</artifactId>
+               <version>${surefire-plugin.version}</version>
+               <configuration>
+                  <systemPropertyVariables>
+                     <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                     <maven.home>${maven.home}</maven.home>
+                     <maven.repo>${settings.localRepository}</maven.repo>
+                  </systemPropertyVariables>
+               </configuration>
+            </plugin>
+            <plugin>
+               <artifactId>maven-failsafe-plugin</artifactId>
+               <version>${failsafe-plugin.version}</version>
+               <configuration>
+                  <systemPropertyVariables>
+                     <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                     <maven.home>${maven.home}</maven.home>
+                     <maven.repo>${settings.localRepository}</maven.repo>
+                  </systemPropertyVariables>
+               </configuration>
             </plugin>
             <plugin>
                <artifactId>maven-compiler-plugin</artifactId>
@@ -106,22 +127,11 @@
                   </compilerArgs>
                </configuration>
             </plugin>
+
          </plugins>
       </pluginManagement>
    </build>
    <profiles>
-      <profile>
-         <id>it</id>
-         <activation>
-            <property>
-               <name>performRelease</name>
-               <value>!true</value>
-            </property>
-         </activation>
-         <modules>
-            <module>integration-tests</module>
-         </modules>
-      </profile>
       <profile>
          <id>release</id>
          <properties>

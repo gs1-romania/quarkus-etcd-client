@@ -7,15 +7,15 @@ import ro.gs1.quarkus.etcd.runtime.EtcdClient;
 
 class EtcdProcessor {
 
-    private static final String FEATURE = "etcd";
+   private static final String FEATURE = "etcd";
 
-    @BuildStep
-    FeatureBuildItem feature() {
-        return new FeatureBuildItem(FEATURE);
-    }
+   @BuildStep
+   FeatureBuildItem feature() {
+      return new FeatureBuildItem(FEATURE);
+   }
 
-    @BuildStep
-    AdditionalBeanBuildItem createContext() {
-        return new AdditionalBeanBuildItem(EtcdClient.class);
-    }
+   @BuildStep
+   AdditionalBeanBuildItem createContext() {
+      return new AdditionalBeanBuildItem(EtcdClient.class);
+   }
 }
