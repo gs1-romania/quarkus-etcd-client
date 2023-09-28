@@ -11,10 +11,10 @@ import org.testcontainers.utility.DockerImageName;
 import java.util.Map;
 import java.util.Optional;
 
-public class EtcdResourceLifecycleManager
+public class EtcdClientLifecycleManager
    implements QuarkusTestResourceLifecycleManager, DevServicesContext.ContextAware {
 
-   private static final Logger logger = Logger.getLogger(EtcdResourceLifecycleManager.class);
+   private static final Logger logger = Logger.getLogger(EtcdClientLifecycleManager.class);
 
    public static final Integer ETCD_PORT = 2379;
 

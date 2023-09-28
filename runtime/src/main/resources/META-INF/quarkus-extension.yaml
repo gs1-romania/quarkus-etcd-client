@@ -1,9 +1,5 @@
-name: Etcd
-#description: Etcd ...
+name: Quarkus etcd client
 metadata:
-#  keywords:
-#    - etcd
-#  guide: ...
-#  categories:
-#    - "miscellaneous"
-#  status: "preview"
+  keywords:
+    - etcd
+    - etcd-client

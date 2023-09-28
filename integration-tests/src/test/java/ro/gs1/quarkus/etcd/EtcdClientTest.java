@@ -3,24 +3,30 @@ package ro.gs1.quarkus.etcd;
 import com.google.protobuf.ByteString;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.helpers.test.UniAssertSubscriber;
-import jakarta.inject.Inject;
+import io.smallrye.mutiny.subscription.Cancellable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ro.gs1.quarkus.etcd.api.KV;
-import ro.gs1.quarkus.etcd.api.PutRequest;
-import ro.gs1.quarkus.etcd.api.RangeRequest;
-import ro.gs1.quarkus.etcd.api.RangeResponse;
+import ro.gs1.quarkus.etcd.api.*;
+import ro.gs1.quarkus.etcd.api.kv.Event;
 
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @QuarkusTest
-@QuarkusTestResource(EtcdResourceLifecycleManager.class)
-public class EtcdResourceTest {
+@QuarkusTestResource(EtcdClientLifecycleManager.class)
+public class EtcdClientTest {
 
-   @Inject
    @Etcd
    KV kvClient;
+
+   @Etcd
+   Lease leaseClient;
+
+   @Etcd
+   Watch watchClient;
 
    @Test
    public void testMultiplePutRead() {
@@ -86,4 +92,32 @@ public class EtcdResourceTest {
       tester.awaitItem();
       tester.assertCompleted();
    }
+
+   @Test
+   public void testLease() {
+      String parentKey = "/test/testLease/parent";
+      String key1 = parentKey + "/key1";
+      String value1 = "test_value1";
+      LeaseGrantResponse leaseGrantResponse = leaseClient.leaseGrant(LeaseGrantRequest.newBuilder()
+            .setTTL(200)
+            .build())
+         .await()
+         .atMost(Duration.ofSeconds(5));
+      Assertions.assertNotEquals(0, leaseGrantResponse.getID());
+      kvClient.put(PutRequest.newBuilder()
+            .setKey(ByteString.copyFromUtf8(key1))
+            .setValue(ByteString.copyFromUtf8(value1))
+            .setLease(leaseGrantResponse.getID())
+            .build())
+         .await()
+         .atMost(Duration.ofSeconds(5));
+      LeaseTimeToLiveResponse leaseTimeToLiveResponse = leaseClient.leaseTimeToLive(LeaseTimeToLiveRequest.newBuilder()
+            .setID(leaseGrantResponse.getID())
+            .setKeys(true)
+            .build())
+         .await()
+         .atMost(Duration.ofSeconds(5));
+      Assertions.assertEquals(1, leaseTimeToLiveResponse.getKeysCount());
+   }
+
 }
