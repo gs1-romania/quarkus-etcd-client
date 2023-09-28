@@ -65,9 +65,6 @@
       <surefire-plugin.version>3.0.0</surefire-plugin.version>
       <grpc.version>1.47.0</grpc.version>
       <protoc.version>3.21.2</protoc.version>
-      <os.maven.plugin.version>1.7.0</os.maven.plugin.version>
-      <!-- TODO: Remove jetcd -->
-      <jetcd.version>0.7.3</jetcd.version>
       <lombok.version>1.18.30</lombok.version>
    </properties>
    <dependencyManagement>

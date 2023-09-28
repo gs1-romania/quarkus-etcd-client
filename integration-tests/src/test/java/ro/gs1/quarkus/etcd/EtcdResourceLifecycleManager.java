@@ -1,15 +1,15 @@
 package ro.gs1.quarkus.etcd;
 
-import java.util.Map;
-import java.util.Optional;
-
-import org.jboss.logging.Logger;
-import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
-import io.etcd.jetcd.launcher.Etcd;
-import io.etcd.jetcd.launcher.EtcdCluster;
-import io.etcd.jetcd.launcher.EtcdContainer;
 import io.quarkus.test.common.DevServicesContext;
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+import org.jboss.logging.Logger;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.shaded.com.google.common.collect.ImmutableMap;
+import org.testcontainers.utility.DockerImageName;
+
+import java.util.Map;
+import java.util.Optional;
 
 public class EtcdResourceLifecycleManager
    implements QuarkusTestResourceLifecycleManager, DevServicesContext.ContextAware {
@@ -20,7 +20,7 @@ public class EtcdResourceLifecycleManager
 
    private Optional<String> containerNetworkId;
 
-   EtcdCluster etcdContainer;
+   GenericContainer etcdContainer;
 
    @Override
    public void setIntegrationTestContext(DevServicesContext context) {
@@ -30,27 +30,24 @@ public class EtcdResourceLifecycleManager
    @Override
    public Map<String, String> start() {
       containerNetworkId.ifPresent(id -> logger.debugv("Network id: {0}", id));
-      etcdContainer = Etcd.builder()
-         .build();
+      etcdContainer = new GenericContainer(DockerImageName.parse("bitnami/etcd:latest"))
+         .withEnv("ALLOW_NONE_AUTHENTICATION", "yes")
+         .withEnv("ETCD_ADVERTISE_CLIENT_URLS", "http://localhost:2379")
+         .withExposedPorts(ETCD_PORT)
+         .waitingFor(Wait.forLogMessage(".*Starting etcd in background*\\n", 1));
       etcdContainer.start();
       logger.infov("ETCD host: {0}", buildEtcdHost(etcdContainer));
       logger.infov("ETCD port: {0}", buildEtcdPort(etcdContainer));
-      return ImmutableMap.of("quarkus.etcd.host", buildEtcdHost(etcdContainer),
-         "quarkus.etcd.port", String.valueOf(buildEtcdPort(etcdContainer)));
+      return ImmutableMap.of("quarkus.etcd.host", buildEtcdHost(etcdContainer), "quarkus.etcd.port",
+         String.valueOf(buildEtcdPort(etcdContainer)));
    }
 
-   protected String buildEtcdHost(EtcdCluster etcdCluster) {
-      for (EtcdContainer container : etcdCluster.containers()) {
-         return container.getHost();
-      }
-      return "localhost";
+   protected String buildEtcdHost(GenericContainer container) {
+      return container.getHost();
    }
 
-   protected Integer buildEtcdPort(EtcdCluster etcdCluster) {
-      for (EtcdContainer container : etcdCluster.containers()) {
-         return container.getMappedPort(ETCD_PORT);
-      }
-      return ETCD_PORT;
+   protected Integer buildEtcdPort(GenericContainer container) {
+      return container.getMappedPort(ETCD_PORT);
    }
 
    @Override
