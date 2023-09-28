@@ -12,24 +12,6 @@
       <module>deployment</module>
       <module>runtime</module>
    </modules>
-   <distributionManagement>
-      <repository>
-         <id>github</id>
-         <name>GitHub GS1 Apache Maven Packages</name>
-         <url>https://maven.pkg.github.com/gs1-romania/quarkus-etcd</url>
-      </repository>
-      <snapshotRepository>
-         <id>github</id>
-         <name>GitHub GS1 Apache Maven Packages snapshots</name>
-         <url>https://maven.pkg.github.com/gs1-romania/quarkus-etcd</url>
-      </snapshotRepository>
-   </distributionManagement>
-   <scm>
-      <connection>scm:git:https://github.com/gs1-romania/quarkus-etcd.git</connection>
-      <url>scm:git:https://github.com/gs1-romania/quarkus-etcd.git</url>
-      <developerConnection>scm:git:https://github.com/gs1-romania/quarkus-etcd.git</developerConnection>
-      <tag>HEAD</tag>
-   </scm>
    <licenses>
       <license>
          <name>The Apache Software License, Version 2.0</name>
@@ -37,18 +19,6 @@
          <distribution>repo</distribution>
       </license>
    </licenses>
-   <repositories>
-      <repository>
-         <id>github</id>
-         <url>https://maven.pkg.github.com/gs1-romania/quarkus-etcd</url>
-         <snapshots>
-            <enabled>true</enabled>
-         </snapshots>
-         <releases>
-            <enabled>true</enabled>
-         </releases>
-      </repository>
-   </repositories>
    <developers>
       <developer>
          <id>liviu</id>
@@ -59,6 +29,12 @@
          <timezone>+2</timezone>
       </developer>
    </developers>
+   <scm>
+      <connection>scm:git:https://github.com/gs1-romania/quarkus-etcd-client.git</connection>
+      <url>scm:git:https://github.com/gs1-romania/quarkus-etcd-client.git</url>
+      <developerConnection>scm:git:https://github.com/gs1-romania/quarkus-etcd-client.git</developerConnection>
+      <tag>HEAD</tag>
+   </scm>
    <properties>
       <compiler-plugin.version>3.11.0</compiler-plugin.version>
       <failsafe-plugin.version>3.1.2</failsafe-plugin.version>
@@ -136,6 +112,33 @@
       </pluginManagement>
    </build>
    <profiles>
+      <profile>
+         <id>github</id>
+         <distributionManagement>
+            <repository>
+               <id>github</id>
+               <name>GitHub GS1 Apache Maven Packages</name>
+               <url>https://maven.pkg.github.com/gs1-romania/quarkus-etcd-client</url>
+            </repository>
+            <snapshotRepository>
+               <id>github</id>
+               <name>GitHub GS1 Apache Maven Packages snapshots</name>
+               <url>https://maven.pkg.github.com/gs1-romania/quarkus-etcd-client</url>
+            </snapshotRepository>
+         </distributionManagement>
+         <repositories>
+            <repository>
+               <id>github</id>
+               <url>https://maven.pkg.github.com/gs1-romania/quarkus-etcd-client</url>
+               <snapshots>
+                  <enabled>true</enabled>
+               </snapshots>
+               <releases>
+                  <enabled>true</enabled>
+               </releases>
+            </repository>
+         </repositories>
+      </profile>
       <profile>
          <id>it</id>
          <activation>
