@@ -21,19 +21,34 @@ Inspired from: https://github.com/etcd-io/jetcd
 You can use @Etcd in your code to inject etcd stub:
 
 ```java
-public void Foo {
+@Etcd
+Lock lock;
+
+@Etcd
+Lease lease;
+
+@Etcd
+Maintenance maintenance;
+
+@Etcd
+Watch watch;
+
+@Etcd
+Cluster cluster;
+```
+
+
+```java
+public class Foo {
     @Etcd
     KV kvClient;
-    @Etcd
-    Lock lock;
-    @Etcd
-    Lease lease;
-    @Etcd
-    Maintenance maintenance;
-    @Etcd
-    Watch watch;
-    @Etcd
-    Cluster cluster;
+    
+    public Uni<PutResponse> bar() {
+       return kvClient.put(PutRequest.newBuilder()
+          .setKey(ByteString.copyFrom("key", StandardCharsets.UTF_8))
+          .setValue(ByteString.copyFrom("value", StandardCharsets.UTF_8))
+          .build());
+    }
 }
 ```
 All the above are Mutiny backed stubs and are using a single gRPC channel application-wise.
@@ -42,8 +57,8 @@ You can also inject the stubs with @GrpcClient.
 If choose this way you need to use the io.quarkus.grpc configuration ([Quarkus Documentation](https://quarkus.io/guides/grpc-getting-started)):
 
 ```java
-   @GrpcClient("etcd")
-   KV kvClient;
+@GrpcClient("etcd")
+KV kvClient;
 ```
 
 ## License
