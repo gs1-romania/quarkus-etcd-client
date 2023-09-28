@@ -1,65 +1,50 @@
-package ro.gs1.quarkus.etcd.runtime;
+package ro.comtec.etcd.quarkus.etcd;
 
-import com.google.protobuf.ByteString;
-import io.quarkus.grpc.GrpcClient;
+import io.grpc.Channel;
+import io.vertx.core.Vertx;
+import io.vertx.grpc.VertxChannelBuilder;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 import org.jboss.logging.Logger;
-import ro.gs1.quarkus.etcd.api.*;
-import ro.gs1.quarkus.etcd.api.kv.KeyValue;
-
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
+import ro.comtec.etcd.quarkus.etcd.config.EtcdConfig;
+import ro.comtec.etcd.quarkus.etcd.kv.KV;
+import ro.comtec.etcd.quarkus.etcd.kv.KVClient;
 
 @ApplicationScoped
 public class EtcdClient {
 
    private static final Logger logger = Logger.getLogger(EtcdClient.class);
 
-   @GrpcClient("etcd")
-   KVGrpc.KVBlockingStub kvBlockingStub;
+   private final Vertx vertx;
 
-   public void put(String key, String value) {
-      PutRequest putRequest = PutRequest.newBuilder()
-         .setKey(ByteString.copyFrom(key.getBytes(Charset.defaultCharset())))
-         .setValue(ByteString.copyFrom(value.getBytes(Charset.defaultCharset())))
-         .build();
-      PutResponse putResponse = kvBlockingStub.put(putRequest);
-      logger.infov("Put key: {0} with value: {1}", key, value);
+   private final Channel channel;
+
+   private final EtcdConfig etcdConfig;
+
+   @Inject
+   public EtcdClient(Vertx vertx, EtcdConfig etcdConfig) {
+      this.vertx = vertx;
+      this.etcdConfig = etcdConfig;
+      this.channel = createGrpcVertxClient();
    }
 
-   public Map<String, String> readPrefix(String key) {
-      RangeRequest rangeRequest = RangeRequest.newBuilder()
-         .setKey(ByteString.copyFrom(key.getBytes()))
-         .setRangeEnd(ByteString.copyFrom("\0".getBytes(Charset.defaultCharset())))
-         .build();
-      RangeResponse rangeResponse = kvBlockingStub.range(rangeRequest);
-      logger.infov("For key: {0} we have {1} of records", key, rangeResponse.getCount());
-      Map<String, String> map = new HashMap<>();
-      for (KeyValue keyValue : rangeResponse.getKvsList()) {
-         logger.infov("Range key: {0} with value: {1}", keyValue.getKey()
-            .toString(Charset.defaultCharset()), keyValue.getValue()
-            .toString(Charset.defaultCharset()));
-         map.put(keyValue.getKey()
-            .toString(Charset.defaultCharset()), keyValue.getValue()
-            .toString(Charset.defaultCharset()));
-      }
-      return map;
+   @Produces
+   @ApplicationScoped
+   public KV getKVClient() {
+      return new KVClient(channel);
    }
 
-   public String read(String key) {
-      RangeRequest rangeRequest = RangeRequest.newBuilder()
-         .setKey(ByteString.copyFrom(key.getBytes()))
-         .build();
-      RangeResponse rangeResponse = kvBlockingStub.range(rangeRequest);
-      logger.infov("For key: {0} we have {1} of records", key, rangeResponse.getCount());
-      for (KeyValue keyValue : rangeResponse.getKvsList()) {
-         logger.infov("Range key: {0} with value: {1}", keyValue.getKey()
-            .toString(Charset.defaultCharset()), keyValue.getValue()
-            .toString(Charset.defaultCharset()));
-         return keyValue.getValue()
-            .toString(Charset.defaultCharset());
-      }
-      return null;
+   private Channel createGrpcVertxClient() {
+      VertxChannelBuilder vertxChannelBuilder = VertxChannelBuilder.forAddress(vertx, etcdConfig.host(),
+         etcdConfig.port());
+      //vertxChannelBuilder.intercept(new AuthTokenInterceptor());
+      // TODO: add TLS support.
+      vertxChannelBuilder.usePlaintext();
+
+
+      logger.debugv("Created GRPC Vert.x Channel for endpoint: {0}:{1}.", etcdConfig.host(), etcdConfig.port()
+         .toString());
+      return vertxChannelBuilder.build();
    }
 }
