@@ -3,17 +3,13 @@ package ro.gs1.quarkus.etcd;
 import com.google.protobuf.ByteString;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.helpers.test.UniAssertSubscriber;
-import io.smallrye.mutiny.subscription.Cancellable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ro.gs1.quarkus.etcd.api.*;
-import ro.gs1.quarkus.etcd.api.kv.Event;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @QuarkusTest
 @QuarkusTestResource(EtcdClientLifecycleManager.class)
@@ -24,9 +20,6 @@ public class EtcdClientTest {
 
    @Etcd
    Lease leaseClient;
-
-   @Etcd
-   Watch watchClient;
 
    @Test
    public void testMultiplePutRead() {

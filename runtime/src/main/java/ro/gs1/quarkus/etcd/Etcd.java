@@ -10,7 +10,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Qualifier
 @Retention(RUNTIME)
-@Target(value = { TYPE, METHOD, FIELD, PARAMETER })
+@Target(value = { FIELD, METHOD })
 public @interface Etcd {
 
 }
