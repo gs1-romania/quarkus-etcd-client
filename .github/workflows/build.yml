@@ -33,19 +33,19 @@ jobs:
 
       - uses: actions/delete-package-versions@v2
         with:
-          package-name: 'ro.gs1.quarkus-etcd'
+          package-name: 'ro.gs1.quarkus-etcd-client'
           ignore-versions: '^[v\d.]+(?!-SNAPSHOT)$'
           min-versions-to-keep: 0
 
       - uses: actions/delete-package-versions@v2
         with:
-          package-name: 'ro.gs1.quarkus-etcd-parent'
+          package-name: 'ro.gs1.quarkus-etcd-client-parent'
           ignore-versions: '^[v\d.]+(?!-SNAPSHOT)$'
           min-versions-to-keep: 0
 
       - uses: actions/delete-package-versions@v2
         with:
-          package-name: 'ro.gs1.quarkus-etcd-deployment'
+          package-name: 'ro.gs1.quarkus-etcd-client-deployment'
           ignore-versions: '^[v\d.]+(?!-SNAPSHOT)$'
           min-versions-to-keep: 0
 
