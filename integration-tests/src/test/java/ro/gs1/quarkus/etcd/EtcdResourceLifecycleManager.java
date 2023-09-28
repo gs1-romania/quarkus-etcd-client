@@ -35,8 +35,8 @@ public class EtcdResourceLifecycleManager
       etcdContainer.start();
       logger.infov("ETCD host: {0}", buildEtcdHost(etcdContainer));
       logger.infov("ETCD port: {0}", buildEtcdPort(etcdContainer));
-      return ImmutableMap.of("quarkus.grpc.clients.etcd.host", buildEtcdHost(etcdContainer),
-         "quarkus.grpc.clients.etcd.port", String.valueOf(buildEtcdPort(etcdContainer)));
+      return ImmutableMap.of("quarkus.etcd.host", buildEtcdHost(etcdContainer),
+         "quarkus.etcd.port", String.valueOf(buildEtcdPort(etcdContainer)));
    }
 
    protected String buildEtcdHost(EtcdCluster etcdCluster) {

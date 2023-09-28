@@ -15,10 +15,6 @@
       <artifactId>quarkus-resteasy-reactive</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-config-yaml</artifactId>
-    </dependency>
-    <dependency>
       <groupId>ro.gs1.quarkus</groupId>
       <artifactId>quarkus-etcd-client</artifactId>
       <version>${project.version}</version>

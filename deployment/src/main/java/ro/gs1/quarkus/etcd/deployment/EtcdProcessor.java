@@ -3,7 +3,7 @@ package ro.gs1.quarkus.etcd.deployment;
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
-import ro.gs1.quarkus.etcd.runtime.EtcdClient;
+import ro.gs1.quarkus.etcd.EtcdClient;
 
 class EtcdProcessor {
 

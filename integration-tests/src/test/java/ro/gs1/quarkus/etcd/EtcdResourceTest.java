@@ -1,20 +1,26 @@
 package ro.gs1.quarkus.etcd;
 
-import java.util.Map;
-import javax.inject.Inject;
-
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import com.google.protobuf.ByteString;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import ro.gs1.quarkus.etcd.runtime.EtcdClient;
+import io.smallrye.mutiny.helpers.test.UniAssertSubscriber;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import ro.gs1.quarkus.etcd.api.KV;
+import ro.gs1.quarkus.etcd.api.PutRequest;
+import ro.gs1.quarkus.etcd.api.RangeRequest;
+import ro.gs1.quarkus.etcd.api.RangeResponse;
+
+import java.nio.charset.StandardCharsets;
 
 @QuarkusTest
 @QuarkusTestResource(EtcdResourceLifecycleManager.class)
 public class EtcdResourceTest {
 
    @Inject
-   EtcdClient etcdClient;
+   @Etcd
+   KV kvClient;
 
    @Test
    public void testMultiplePutRead() {
@@ -25,15 +31,27 @@ public class EtcdResourceTest {
       String value2 = "test_value2";
       String key3 = parentKey + "/key3";
       String value3 = "test_value3";
-      etcdClient.put(key1, value1);
-      etcdClient.put(key2, value2);
-      etcdClient.put(key3, value3);
-      String read1 = etcdClient.read(key1);
-      String read2 = etcdClient.read(key2);
-      String read3 = etcdClient.read(key3);
-      Assertions.assertEquals(value1, read1);
-      Assertions.assertEquals(value2, read2);
-      Assertions.assertEquals(value3, read3);
+      testMultiplePutReadHelper(key1, value1);
+      testMultiplePutReadHelper(key2, value2);
+      testMultiplePutReadHelper(key3, value3);
+   }
+
+   private void testMultiplePutReadHelper(final String key, final String value) {
+      UniAssertSubscriber<RangeResponse> tester = kvClient.put(PutRequest.newBuilder()
+            .setKey(ByteString.copyFrom(key, StandardCharsets.UTF_8))
+            .setValue(ByteString.copyFrom(value, StandardCharsets.UTF_8))
+            .build())
+         .chain(() -> kvClient.range(RangeRequest.newBuilder()
+            .setKey(ByteString.copyFrom(key, StandardCharsets.UTF_8))
+            .build()))
+         .invoke(i -> Assertions.assertEquals(value, i.getKvsList()
+            .get(0)
+            .getValue()
+            .toString(StandardCharsets.UTF_8)))
+         .subscribe()
+         .withSubscriber(UniAssertSubscriber.create());
+      tester.awaitItem();
+      tester.assertCompleted();
    }
 
    @Test
@@ -45,13 +63,27 @@ public class EtcdResourceTest {
       String value2 = "test_value2";
       String key3 = parentKey + "/key3";
       String value3 = "test_value3";
-      etcdClient.put(key1, value1);
-      etcdClient.put(key2, value2);
-      etcdClient.put(key3, value3);
-      Map<String, String> read = etcdClient.readPrefix(parentKey);
-      Assertions.assertEquals(3, read.size());
-      Assertions.assertEquals(value1, read.get(key1));
-      Assertions.assertEquals(value2, read.get(key2));
-      Assertions.assertEquals(value3, read.get(key3));
+      UniAssertSubscriber<RangeResponse> tester = kvClient.put(PutRequest.newBuilder()
+            .setKey(ByteString.copyFrom(key1, StandardCharsets.UTF_8))
+            .setValue(ByteString.copyFrom(value1, StandardCharsets.UTF_8))
+            .build())
+         .chain(() -> kvClient.put(PutRequest.newBuilder()
+            .setKey(ByteString.copyFrom(key2, StandardCharsets.UTF_8))
+            .setValue(ByteString.copyFrom(value2, StandardCharsets.UTF_8))
+            .build()))
+         .chain(() -> kvClient.put(PutRequest.newBuilder()
+            .setKey(ByteString.copyFrom(key3, StandardCharsets.UTF_8))
+            .setValue(ByteString.copyFrom(value3, StandardCharsets.UTF_8))
+            .build()))
+         .chain(() -> kvClient.range(RangeRequest.newBuilder()
+            .setKey(ByteString.copyFrom(parentKey, StandardCharsets.UTF_8))
+            .setRangeEnd(ByteString.copyFrom("\0", StandardCharsets.UTF_8))
+            .build()))
+         .invoke(i -> Assertions.assertEquals(3, i.getKvsList()
+            .size()))
+         .subscribe()
+         .withSubscriber(UniAssertSubscriber.create());
+      tester.awaitItem();
+      tester.assertCompleted();
    }
 }

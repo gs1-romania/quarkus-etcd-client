@@ -11,7 +11,6 @@
    <modules>
       <module>deployment</module>
       <module>runtime</module>
-      <module>etcd-proto</module>
    </modules>
    <distributionManagement>
       <repository>
@@ -69,6 +68,7 @@
       <os.maven.plugin.version>1.7.0</os.maven.plugin.version>
       <!-- TODO: Remove jetcd -->
       <jetcd.version>0.7.3</jetcd.version>
+      <lombok.version>1.18.30</lombok.version>
    </properties>
    <dependencyManagement>
       <dependencies>
@@ -94,7 +94,7 @@
             <plugin>
                <groupId>io.quarkus</groupId>
                <artifactId>quarkus-maven-plugin</artifactId>
-               <version>${quarkus.version}</version>
+               <version>${quarkus.platform.version}</version>
             </plugin>
             <plugin>
                <artifactId>maven-surefire-plugin</artifactId>
@@ -132,6 +132,18 @@
       </pluginManagement>
    </build>
    <profiles>
+      <profile>
+         <id>it</id>
+         <activation>
+            <property>
+               <name>performRelease</name>
+               <value>!true</value>
+            </property>
+         </activation>
+         <modules>
+            <module>integration-tests</module>
+         </modules>
+      </profile>
       <profile>
          <id>release</id>
          <properties>
