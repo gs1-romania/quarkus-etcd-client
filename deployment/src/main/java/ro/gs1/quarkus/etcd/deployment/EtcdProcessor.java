@@ -7,7 +7,7 @@ import ro.gs1.quarkus.etcd.EtcdClient;
 
 class EtcdProcessor {
 
-   private static final String FEATURE = "etcd";
+   private static final String FEATURE = "etcd-client";
 
    @BuildStep
    FeatureBuildItem feature() {
