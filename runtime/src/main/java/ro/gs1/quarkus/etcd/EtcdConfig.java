@@ -57,7 +57,9 @@ public interface EtcdConfig {
     * @asciidoclet
     */
    // @formatter:on
-   @WithConverter(DurationConverter.class) Optional<Duration> authenticationTimeout();
+   @WithConverter(DurationConverter.class)
+   @WithDefault("5s")
+   Optional<Duration> authenticationTimeout();
    // @formatter:off
    /**
     * Sets the time without read activity before sending a keepalive ping.
@@ -105,7 +107,7 @@ public interface EtcdConfig {
    /**
     * Overrides the authority used with TLS and HTTP virtual hosting.
     *
-    * It does not change what host is * actually connected to. Is commonly in the form host:port.
+    * It does not change what host is actually connected to. Is commonly in the form host:port.
     *
     * @asciidoclet
     */
