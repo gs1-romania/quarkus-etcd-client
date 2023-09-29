@@ -14,11 +14,11 @@ For Quarkus version 3.4.1+
 ### Maven
 
 ```xml
-   <dependency>
-      <groupId>ro.gs1</groupId>
-      <artifactId>quarkus-etcd-client</artifactId>
-      <version>${current.version}</version>
-   </dependency>
+<dependency>
+  <groupId>ro.gs1</groupId>
+  <artifactId>quarkus-etcd-client</artifactId>
+  <version>${current.version}</version>
+</dependency>
 ```
 ## Configuration
 
