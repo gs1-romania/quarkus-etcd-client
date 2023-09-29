@@ -1,6 +1,0 @@
-quarkus:
-  grpc:
-    clients:
-      etcd:
-        host: 'vm7.gs1.lan'
-        port: 2379
