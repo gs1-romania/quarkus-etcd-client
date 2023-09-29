@@ -7,6 +7,8 @@ Inspired from: https://github.com/etcd-io/jetcd
 This project is experimental, use at your own risk.
 There is no support for TLS.
 
+For Quarkus version 3.4.1+
+
 ## Download
 
 ### Maven
