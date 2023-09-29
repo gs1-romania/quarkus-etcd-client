@@ -131,7 +131,7 @@ public class EtcdClient {
       return token;
    }
 
-   void forceTokenRefresh() {
+   public void forceTokenRefresh() {
       synchronized (lock) {
          token = null;
       }
