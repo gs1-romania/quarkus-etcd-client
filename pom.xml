@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <groupId>ro.gs1</groupId>
    <artifactId>quarkus-etcd-client-parent</artifactId>
-   <version>0.2-SNAPSHOT</version>
+   <version>0.2</version>
    <packaging>pom</packaging>
    <name>Quarkus - etcd Client - Parent</name>
    <description>A Quarkus etcd client extension.</description>
@@ -35,7 +34,7 @@
       <connection>scm:git:https://github.com/gs1-romania/quarkus-etcd-client.git</connection>
       <url>scm:git:https://github.com/gs1-romania/quarkus-etcd-client.git</url>
       <developerConnection>scm:git:https://github.com/gs1-romania/quarkus-etcd-client.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>quarkus-etcd-client-parent-0.2</tag>
    </scm>
    <properties>
       <compiler-plugin.version>3.11.0</compiler-plugin.version>
