@@ -5,7 +5,6 @@ This project exposes the etcd gRPC API (KV, Lease, Lock, Maintenance, Watch, Clu
 Inspired from: https://github.com/etcd-io/jetcd
 
 This project is experimental, use at your own risk.
-There is no support for TLS.
 
 For Quarkus version 3.4.1+
 
@@ -23,84 +22,117 @@ For Quarkus version 3.4.1+
 ## Configuration
 
 ```properties
+# --- Configuration per client, replace "client-name" (quotes included) ---
 
+# etcd server host
 # Defaults to 'localhost'
-quarkus.etcd.host=localhost
+quarkus.etcd."client-name".host=localhost
 
-# Defaults to '2379'
-quarkus.etcd.port=2379
+# etcd server port.
+# Defaults to '2379'.
+quarkus.etcd."client-name".port=2379
 
+# Client username for authentication with server.
 # No default
-quarkus.etcd.name=my_username
+quarkus.etcd."client-name".name=my_username
 
-# No default
-quarkus.etcd.password=my_password
+# Client password for authentication with server.
+# No default.
+quarkus.etcd."client-name".password=my_password
 
-# Defaults to 5s default
-quarkus.etcd.authenticationTimeout=5s
+# Timeout for authentication with the server. 
+# Defaults to 5s default.
+quarkus.etcd."client-name".authentication-timeout=5s
 
 # Vert.x Channel default '9223372036854775807s'
-quarkus.etcd.keepAliveTime=5s
+quarkus.etcd."client-name".keep-alive-time=5s
 
 # Vert.x Channel default '20s'
-quarkus.etcd.keepAliveTimeout=20s
+quarkus.etcd."client-name".keep-alive-timeout=20s
 
 # Vert.x Channel default 'false'
-quarkus.etcd.keepAliveWithoutCalls=false
+quarkus.etcd."client-name".keep-alive-without-calls=false
 
 # Vert.x Channel default '4194304' (4MiB)
-quarkus.etcd.maxInboundMessageSize=4194304
+quarkus.etcd."client-name".max-inbound-message-size=4194304
 
 # Vert.x Channel default ''
-quarkus.etcd.authority=
+quarkus.etcd."client-name".authority=
 
 # Vert.x Channel default 'pick_first'
-quarkus.etcd.defaultLoadBalancingPolicy=pick_first
+quarkus.etcd."client-name".default-load-balancing-policy=pick_first
+```
+
+```properties
+# --- Certificate authentication configuration per client name, optional ---
+
+# Path to the JKS file, classpath or file.
+# No default
+quarkus.etcd."client-name".ssl-config.key-store.path=
+
+# Password of the JKS.
+# No default
+quarkus.etcd."client-name".ssl-config.key-store.password=
+
+# If there are multiple aliases in the JKS, choose one.
+# No default
+quarkus.etcd."client-name".ssl-config.key-store.alias=
+
+# Password of the alias.
+# No default
+quarkus.etcd."client-name".ssl-config.key-store.alias-password=
+
+# --- SSL/TLS configuration per client name, optional ---
+
+# Path to the JKS file, classpath or file.
+# No default
+quarkus.etcd."client-name".ssl-config.trust-store.path=
+
+# Password of the JKS.
+# No default
+quarkus.etcd."client-name".ssl-config.trust-store.password=
 ```
 
 ## Usage
 
-You can use @Etcd in your code to inject etcd stub:
+You can use @EtcdClient in your code to inject etcd stub:
 
 ```java
-@Etcd
-Lock lock;
+public class Foo {
 
-@Etcd
-Lease lease;
-
-@Etcd
-Maintenance maintenance;
-
-@Etcd
-Watch watch;
-
-@Etcd
-Cluster cluster;
+   @EtcdClient("clientName")
+   EtcdClientChannel client;
+}
 ```
 
 
 ```java
 public class Foo {
-    @Etcd
-    KV kvClient;
+   @EtcdClient("clientName")
+   EtcdClientChannel client;
     
     public Uni<PutResponse> bar() {
-       return kvClient.put(PutRequest.newBuilder()
+       return client.getKVClient().put(PutRequest.newBuilder()
           .setKey(ByteString.copyFrom("key", StandardCharsets.UTF_8))
           .setValue(ByteString.copyFrom("value", StandardCharsets.UTF_8))
           .build());
     }
 }
 ```
-All the above are Mutiny backed stubs and are using a single gRPC channel application-wise.
+All the above are Mutiny backed stubs and are using a single gRPC channel per client.
+
+Authentication is done by token with username and password or by certificate.
+Also, TLS/SLL is supported.
 
 You can also inject the stubs with @GrpcClient. 
 If choose this way you need to use the io.quarkus.grpc configuration ([Quarkus Documentation](https://quarkus.io/guides/grpc-getting-started)):
 
 ```java
-@GrpcClient("etcd")
-KV kvClient;
+public class Foo {
+
+   @GrpcClient("etcd")
+   KV kvClient;
+}
 ```
 
 ## License

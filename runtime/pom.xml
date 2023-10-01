@@ -21,16 +21,14 @@
          <groupId>io.quarkus</groupId>
          <artifactId>quarkus-grpc</artifactId>
       </dependency>
+      <dependency>
+         <groupId>ro.gs1</groupId>
+         <artifactId>quarkus-etcd-client-api</artifactId>
+         <version>${project.version}</version>
+      </dependency>
    </dependencies>
    <build>
       <plugins>
-         <plugin>
-            <artifactId>maven-release-plugin</artifactId>
-            <version>3.0.1</version>
-            <configuration>
-               <scmCommentPrefix>[ci skip]</scmCommentPrefix>
-            </configuration>
-         </plugin>
          <plugin>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-maven-plugin</artifactId>

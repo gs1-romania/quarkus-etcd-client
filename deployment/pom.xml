@@ -24,6 +24,11 @@
       </dependency>
       <dependency>
          <groupId>ro.gs1</groupId>
+         <artifactId>quarkus-etcd-client-api</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>ro.gs1</groupId>
          <artifactId>quarkus-etcd-client</artifactId>
          <version>${project.version}</version>
       </dependency>

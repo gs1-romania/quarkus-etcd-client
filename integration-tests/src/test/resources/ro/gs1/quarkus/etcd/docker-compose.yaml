@@ -1,0 +1,9 @@
+services:
+  etcd:
+    image: bitnami/etcd:latest
+    ports:
+      - 2379:2379
+    environment:
+      ETCD_ROOT_PASSWORD: test
+    volumes:
+      - ./etcd.conf.yaml:/opt/bitnami/etcd/conf/etcd.conf.yml
