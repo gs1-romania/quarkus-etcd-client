@@ -28,6 +28,9 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           server-id: github
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+
 
       - uses: actions/delete-package-versions@v4
         with:
@@ -59,3 +62,4 @@ jobs:
         run: mvn deploy -Dmaven.test.skip=true -q -Pgithub
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
