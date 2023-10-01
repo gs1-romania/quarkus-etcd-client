@@ -39,6 +39,14 @@ jobs:
           ignore-versions: '^[v\d.]+(?!-SNAPSHOT)$'
           min-versions-to-keep: 2
 
+
+      - uses: actions/delete-package-versions@v4
+        with:
+          package-name: 'ro.gs1.quarkus-etcd-client-api'
+          package-type: maven
+          ignore-versions: '^[v\d.]+(?!-SNAPSHOT)$'
+          min-versions-to-keep: 2
+
       - uses: actions/delete-package-versions@v4
         with:
           package-name: 'ro.gs1.quarkus-etcd-client-parent'
