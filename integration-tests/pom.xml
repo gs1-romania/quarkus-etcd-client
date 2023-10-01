@@ -5,6 +5,7 @@
       <groupId>ro.gs1</groupId>
       <artifactId>quarkus-etcd-client-parent</artifactId>
       <version>0.2-SNAPSHOT</version>
+      <relativePath>../pom.xml</relativePath>
    </parent>
    <artifactId>quarkus-etcd-client-integration-tests</artifactId>
    <name>Quarkus - etcd Client - Integration Tests</name>

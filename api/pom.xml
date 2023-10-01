@@ -7,6 +7,7 @@
       <groupId>ro.gs1</groupId>
       <artifactId>quarkus-etcd-client-parent</artifactId>
       <version>0.2-SNAPSHOT</version>
+      <relativePath>../pom.xml</relativePath>
    </parent>
    <artifactId>quarkus-etcd-client-api</artifactId>
    <name>Quarkus - etcd Client - API</name>
