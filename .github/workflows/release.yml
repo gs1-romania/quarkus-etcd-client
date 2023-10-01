@@ -28,35 +28,42 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-          server-id: github
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }} # Value of the GPG private key to import
-          gpg-passphrase: GPG_PASSPHRASE # env variable for GPG private key passphrase
-          
+          server-id: ossrh
+          server-username: OSSRH_MAVEN_USERNAME
+          server-password: OSSRH_MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+
       - name: Configure Git author
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
 
       - name: Maven release
+        id: release
         run: |
           git checkout -b release-${{ github.event.inputs.releaseVersion }}
           git fetch --tags
-          mvn -B release:prepare -Prelease -Pgithub -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}
+          mvn -B release:prepare -Prelease-sona -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}
           git checkout ${{ github.base_ref }}
           git rebase release-${{ github.event.inputs.releaseVersion }}
-          mvn -B release:perform -Darguments=-DperformRelease -DperformRelease -Prelease -Pgithub
+          mvn -B release:perform -Prelease-sona -Darguments=-DperformRelease -DperformRelease
         env:
           GITHUB_TOKEN: ${{ github.token }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          OSSRH_MAVEN_USERNAME: ${{ secrets.OSSRH_MAVEN_USERNAME }}
+          OSSRH_MAVEN_PASSWORD: ${{ secrets.OSSRH_MAVEN_PASSWORD }}
 
       - name: Push changes to ${{ github.base_ref }}
         uses: ad-m/github-push-action@v0.6.0
+        if: steps.release.outcome == 'success'
         with:
           github_token: ${{ github.token }}
           branch: ${{ github.base_ref }}
 
       - name: Push tags
         uses: ad-m/github-push-action@v0.6.0
+        if: steps.release.outcome == 'success'
         with:
           github_token: ${{ github.token }}
           tags: true

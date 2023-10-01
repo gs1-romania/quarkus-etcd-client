@@ -185,7 +185,10 @@
          </repositories>
       </profile>
       <profile>
-         <id>sona</id>
+         <id>release-sona</id>
+         <properties>
+            <project.scm.id>ossrh</project.scm.id>
+         </properties>
          <distributionManagement>
             <snapshotRepository>
                <id>ossrh</id>
@@ -210,7 +213,7 @@
          </modules>
       </profile>
       <profile>
-         <id>release</id>
+         <id>release-github</id>
          <properties>
             <project.scm.id>github</project.scm.id>
          </properties>
