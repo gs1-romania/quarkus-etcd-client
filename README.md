@@ -126,7 +126,13 @@ public class Foo {
 ```
 All the above are Mutiny backed stubs and are using a single gRPC channel per client.
 
-Authentication is done by token with username and password or by certificate.
+## Authentication
+
+There is support for authentication:
+
+* Token authentication with username and password,
+* Certificate authentication;
+
 Also, TLS/SLL is supported.
 
 You can also inject the stubs with @GrpcClient. 

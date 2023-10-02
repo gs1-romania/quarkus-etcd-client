@@ -99,7 +99,7 @@ public class EtcdClientChannelVertx implements EtcdClientChannel {
          vertxChannelBuilder.overrideAuthority(config.authority()
             .get());
       }
-      logger.debugv("Created GRPC Vert.x Channel for endpoint: {0}:{1}.", config.host(), config.port()
+      logger.debugv("Created gRPC Vert.x Channel for endpoint: {0}:{1}.", config.host(), config.port()
          .toString());
       return vertxChannelBuilder.build();
    }
@@ -176,6 +176,8 @@ public class EtcdClientChannelVertx implements EtcdClientChannel {
    public void close() throws InterruptedException {
       synchronized (lock) {
          if (channel != null) {
+            logger.debugv("Closing gRPC Channel for endpoint: {0}:{1}.", config.host(), config.port()
+               .toString());
             channel.shutdownNow().awaitTermination(10, TimeUnit.SECONDS);
          }
       }
