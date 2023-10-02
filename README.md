@@ -1,4 +1,8 @@
 # quarkus-etcd-client - etcd Client for Quarkus
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/gs1-romania/quarkus-etcd-client/.github%2Fworkflows%2Fbuild.yml)
+![GitHub](https://img.shields.io/github/license/gs1-romania/quarkus-etcd-client)
+![Maven Central](https://img.shields.io/maven-central/v/ro.gs1/quarkus-etcd-client)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/gs1-romania/quarkus-etcd-client)
 
 This project exposes the etcd gRPC API (KV, Lease, Lock, Maintenance, Watch, Cluster).
 
