@@ -41,13 +41,6 @@
    <build>
       <plugins>
          <plugin>
-            <artifactId>maven-release-plugin</artifactId>
-            <version>3.0.1</version>
-            <configuration>
-               <scmCommentPrefix>[ci skip]</scmCommentPrefix>
-            </configuration>
-         </plugin>
-         <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
             <configuration>
                <annotationProcessorPaths>
@@ -61,12 +54,4 @@
          </plugin>
       </plugins>
    </build>
-   <profiles>
-      <profile>
-         <id>release</id>
-         <properties>
-            <project.scm.id>github</project.scm.id>
-         </properties>
-      </profile>
-   </profiles>
 </project>

@@ -50,13 +50,6 @@
    <build>
       <plugins>
          <plugin>
-            <artifactId>maven-release-plugin</artifactId>
-            <version>3.0.1</version>
-            <configuration>
-               <scmCommentPrefix>[ci skip]</scmCommentPrefix>
-            </configuration>
-         </plugin>
-         <plugin>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-maven-plugin</artifactId>
             <executions>
@@ -108,12 +101,6 @@
          </build>
          <properties>
             <quarkus.package.type>native</quarkus.package.type>
-         </properties>
-      </profile>
-      <profile>
-         <id>release</id>
-         <properties>
-            <project.scm.id>github</project.scm.id>
          </properties>
       </profile>
    </profiles>
