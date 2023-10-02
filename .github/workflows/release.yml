@@ -44,10 +44,10 @@ jobs:
         run: |
           git checkout -b release-${{ github.event.inputs.releaseVersion }}
           git fetch --tags
-          mvn -B release:prepare -Prelease-sona -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}
+          mvn -q -B release:prepare -Prelease-sona -DreleaseVersion=${{ github.event.inputs.releaseVersion }} -DdevelopmentVersion=${{ github.event.inputs.developmentVersion }}
           git checkout ${{ github.base_ref }}
           git rebase release-${{ github.event.inputs.releaseVersion }}
-          mvn -B release:perform -Prelease-sona -Darguments=-DperformRelease -DperformRelease
+          mvn -q -B release:perform -Prelease-sona -Darguments=-DperformRelease -DperformRelease
         env:
           GITHUB_TOKEN: ${{ github.token }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
