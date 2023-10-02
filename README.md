@@ -29,7 +29,7 @@ For Quarkus version 3.4.1+
 ```properties
 # --- Configuration per client, replace "client-name" (quotes included) ---
 
-# etcd server host
+# etcd server host.
 # Defaults to 'localhost'
 quarkus.etcd."client-name".host=localhost
 
@@ -38,7 +38,7 @@ quarkus.etcd."client-name".host=localhost
 quarkus.etcd."client-name".port=2379
 
 # Client username for authentication with server.
-# No default
+# No default.
 quarkus.etcd."client-name".name=my_username
 
 # Client password for authentication with server.
@@ -49,22 +49,22 @@ quarkus.etcd."client-name".password=my_password
 # Defaults to 5s default.
 quarkus.etcd."client-name".authentication-timeout=5s
 
-# Vert.x Channel default '9223372036854775807s'
+# Vert.x Channel default '9223372036854775807s'.
 quarkus.etcd."client-name".keep-alive-time=5s
 
-# Vert.x Channel default '20s'
+# Vert.x Channel default '20s'.
 quarkus.etcd."client-name".keep-alive-timeout=20s
 
-# Vert.x Channel default 'false'
+# Vert.x Channel default 'false'.
 quarkus.etcd."client-name".keep-alive-without-calls=false
 
-# Vert.x Channel default '4194304' (4MiB)
+# Vert.x Channel default '4194304' (4MiB).
 quarkus.etcd."client-name".max-inbound-message-size=4194304
 
-# Vert.x Channel default ''
+# Vert.x Channel default ''.
 quarkus.etcd."client-name".authority=
 
-# Vert.x Channel default 'pick_first'
+# Vert.x Channel default 'pick_first'.
 quarkus.etcd."client-name".default-load-balancing-policy=pick_first
 ```
 
@@ -72,29 +72,29 @@ quarkus.etcd."client-name".default-load-balancing-policy=pick_first
 # --- Certificate authentication configuration per client name, optional ---
 
 # Path to the JKS file, classpath or file.
-# No default
+# No default.
 quarkus.etcd."client-name".ssl-config.key-store.path=
 
 # Password of the JKS.
-# No default
+# No default.
 quarkus.etcd."client-name".ssl-config.key-store.password=
 
 # If there are multiple aliases in the JKS, choose one.
-# No default
+# No default.
 quarkus.etcd."client-name".ssl-config.key-store.alias=
 
 # Password of the alias.
-# No default
+# No default.
 quarkus.etcd."client-name".ssl-config.key-store.alias-password=
 
 # --- SSL/TLS configuration per client name, optional ---
 
 # Path to the JKS file, classpath or file.
-# No default
+# No default.
 quarkus.etcd."client-name".ssl-config.trust-store.path=
 
 # Password of the JKS.
-# No default
+# No default.
 quarkus.etcd."client-name".ssl-config.trust-store.password=
 ```
 
