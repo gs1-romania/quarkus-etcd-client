@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import ro.gs1.quarkus.etcd.api.EtcdClient;
 import ro.gs1.quarkus.etcd.api.EtcdClientChannel;
 import ro.gs1.quarkus.etcd.api.LeaseGrantRequest;
-import ro.gs1.quarkus.etcd.api.TxnRequest;
 import ro.gs1.quarkus.etcd.api.lock.LockRequest;
 import ro.gs1.quarkus.etcd.api.lock.UnlockRequest;
 import ro.gs1.quarkus.etcd.api.lock.UnlockResponse;

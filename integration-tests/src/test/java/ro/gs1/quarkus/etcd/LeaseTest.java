@@ -6,7 +6,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ro.gs1.quarkus.etcd.api.*;
-import ro.gs1.quarkus.etcd.api.lock.LockRequest;
 
 import java.time.Duration;
 

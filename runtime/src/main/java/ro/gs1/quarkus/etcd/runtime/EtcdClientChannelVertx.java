@@ -12,11 +12,10 @@ import ro.gs1.quarkus.etcd.api.lock.LockClient;
 import ro.gs1.quarkus.etcd.runtime.config.EtcdClientConfig;
 import ro.gs1.quarkus.etcd.runtime.config.EtcdSslConfig;
 
-import java.io.Closeable;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-public class EtcdClientChannelVertx implements EtcdClientChannel, Closeable {
+public class EtcdClientChannelVertx implements EtcdClientChannel {
 
    private static final Logger logger = Logger.getLogger(EtcdClientChannelVertx.class);
 
@@ -174,11 +173,10 @@ public class EtcdClientChannelVertx implements EtcdClientChannel, Closeable {
       return channel;
    }
 
-   @Override
-   public void close() {
+   public void close() throws InterruptedException {
       synchronized (lock) {
          if (channel != null) {
-            channel.shutdownNow();
+            channel.shutdownNow().awaitTermination(10, TimeUnit.SECONDS);
          }
       }
    }
@@ -244,5 +242,9 @@ public class EtcdClientChannelVertx implements EtcdClientChannel, Closeable {
       }
    }
 
-   ;
+   @Override
+   public String getClientName() {
+      return clientName;
+   }
+
 }

@@ -17,6 +17,7 @@ import org.jboss.jandex.AnnotationValue;
 import org.jboss.jandex.DotName;
 import ro.gs1.quarkus.etcd.api.EtcdClient;
 import ro.gs1.quarkus.etcd.api.EtcdClientChannel;
+import ro.gs1.quarkus.etcd.runtime.EtcdClientDestroyer;
 import ro.gs1.quarkus.etcd.runtime.EtcdClientFactory;
 import ro.gs1.quarkus.etcd.runtime.config.EtcdConfigProvider;
 
@@ -64,7 +65,8 @@ class EtcdClientProcessor {
                .scope(ApplicationScoped.class)
                .unremovable()
                .forceApplicationClass()
-               .creator(mc -> EtcdClientProcessor.this.generateChannelProducer(mc, client));
+               .creator(mc -> EtcdClientProcessor.this.generateChannelProducer(mc, client))
+               .destroyer(EtcdClientDestroyer.class);
             syntheticBeans.produce(configurator.done());
          }
          features.produce(new FeatureBuildItem(FEATURE));

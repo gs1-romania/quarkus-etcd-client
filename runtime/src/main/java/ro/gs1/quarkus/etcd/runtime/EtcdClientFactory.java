@@ -2,11 +2,15 @@ package ro.gs1.quarkus.etcd.runtime;
 
 import io.quarkus.arc.Arc;
 import io.quarkus.arc.ArcContainer;
+import io.quarkus.arc.BeanDestroyer;
 import io.quarkus.arc.InstanceHandle;
 import io.vertx.core.Vertx;
+import jakarta.enterprise.context.spi.CreationalContext;
 import ro.gs1.quarkus.etcd.api.EtcdClientChannel;
 import ro.gs1.quarkus.etcd.runtime.config.EtcdClientConfig;
 import ro.gs1.quarkus.etcd.runtime.config.EtcdConfigProvider;
+
+import java.util.Map;
 
 public class EtcdClientFactory {
 
@@ -29,4 +33,5 @@ public class EtcdClientFactory {
          .get();
       return new EtcdClientChannelVertx(name, config, vertx);
    }
+
 }

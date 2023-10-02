@@ -44,5 +44,10 @@ public interface EtcdClientChannel {
     * @return The underlying gRPC managed channel of this client.
     */
    ManagedChannel getChannel();
+
+   /**
+    * @return The client name.
+    */
+   String getClientName();
 }
 

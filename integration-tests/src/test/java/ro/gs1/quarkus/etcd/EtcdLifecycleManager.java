@@ -46,6 +46,8 @@ public class EtcdLifecycleManager implements QuarkusTestResourceLifecycleManager
 
    private GenericContainer<?> etcdContainerWithTlsCertAuth;
 
+   private GenericContainer<?> etcdContainerWithTlsUserAuth;
+
    @Override
    public void setIntegrationTestContext(DevServicesContext context) {
       containerNetworkId = context.containerNetworkId();
@@ -69,23 +71,57 @@ public class EtcdLifecycleManager implements QuarkusTestResourceLifecycleManager
          new ImageFromDockerfile().withFileFromPath("server.crt", Path.of("target/server.crt"))
             .withFileFromPath("server.key", Path.of("target/server.key"))
             .withFileFromClasspath("Dockerfile", "/ro/gs1/quarkus/etcd/Dockerfile")).withExposedPorts(ETCD_PORT)
-         .withCommand("/usr/local/bin/etcd", "--name", "infra0", "--data-dir", "infra0", "--client-cert-auth",
+         .withCommand("/usr/local/bin/etcd", "--name", "etcd0", "--client-cert-auth",
             "--trusted-ca-file=/etc/ssl/etcd/ca-certificate.crt", "--cert-file=/etc/ssl/etcd/certificate.crt",
+            "--key-file=/etc/ssl/etcd/private-key.key", "--advertise-client-urls", "https://0.0.0.0:2379",
+            "--listen-client-urls", "https://0.0.0.0:2379")
+         .waitingFor(Wait.forLogMessage(".*ready to serve client requests.*", 1));
+      etcdContainerWithTlsUserAuth = new GenericContainer<>(
+         new ImageFromDockerfile().withFileFromPath("server.crt", Path.of("target/server.crt"))
+            .withFileFromPath("server.key", Path.of("target/server.key"))
+            .withFileFromClasspath("Dockerfile", "/ro/gs1/quarkus/etcd/Dockerfile")).withExposedPorts(ETCD_PORT)
+         .withCommand("/usr/local/bin/etcd", "--name", "etcd0", "--cert-file=/etc/ssl/etcd/certificate.crt",
             "--key-file=/etc/ssl/etcd/private-key.key", "--advertise-client-urls", "https://0.0.0.0:2379",
             "--listen-client-urls", "https://0.0.0.0:2379")
          .waitingFor(Wait.forLogMessage(".*ready to serve client requests.*", 1));
       containerNetworkId.ifPresent(etcdContainerNoTlsNoAuth::withNetworkMode);
       containerNetworkId.ifPresent(etcdContainerWithTlsCertAuth::withNetworkMode);
+      containerNetworkId.ifPresent(etcdContainerWithTlsUserAuth::withNetworkMode);
       etcdContainerNoTlsNoAuth.start();
       etcdContainerWithTlsCertAuth.start();
-      logger.info(etcdContainerNoTlsNoAuth.getLogs());
+      etcdContainerWithTlsUserAuth.start();
+      try {
+         etcdContainerWithTlsUserAuth.execInContainer("/usr/local/bin/etcdctl",
+            "--cacert=/etc/ssl/etcd/certificate.crt", "role", "add", "root");
+         etcdContainerWithTlsUserAuth.execInContainer("/usr/local/bin/etcdctl",
+            "--cacert=/etc/ssl/etcd/certificate.crt", "user", "add", "root:rootpw");
+         etcdContainerWithTlsUserAuth.execInContainer("/usr/local/bin/etcdctl",
+            "--cacert=/etc/ssl/etcd/certificate.crt", "user", "grant-role", "root", "root");
+         etcdContainerWithTlsUserAuth.execInContainer("/usr/local/bin/etcdctl",
+            "--cacert=/etc/ssl/etcd/certificate.crt", "role", "add", "role0");
+         etcdContainerWithTlsUserAuth.execInContainer("/usr/local/bin/etcdctl",
+            "--cacert=/etc/ssl/etcd/certificate.crt", "role", "grant-permission", "role0", "--prefix=true", "readwrite", "/");
+         etcdContainerWithTlsUserAuth.execInContainer("/usr/local/bin/etcdctl",
+            "--cacert=/etc/ssl/etcd/certificate.crt", "user", "add", "test_user:test");
+         etcdContainerWithTlsUserAuth.execInContainer("/usr/local/bin/etcdctl",
+            "--cacert=/etc/ssl/etcd/certificate.crt", "user", "grant-role", "test_user", "role0");
+         etcdContainerWithTlsUserAuth.execInContainer("/usr/local/bin/etcdctl",
+            "--cacert=/etc/ssl/etcd/certificate.crt", "auth", "enable");
+      } catch (IOException | InterruptedException e) {
+         logger.error(e);
+         throw new RuntimeException(e);
+      }
       logger.infov("etcdContainerNoTlsNoAuth endpoint: {0}:{1}", buildEtcdHost(etcdContainerNoTlsNoAuth),
          buildEtcdPort(etcdContainerNoTlsNoAuth));
       logger.infov("etcdContainerWithTlsCertAuth endpoint: {0}:{1}", buildEtcdHost(etcdContainerWithTlsCertAuth),
          buildEtcdPort(etcdContainerWithTlsCertAuth));
+      logger.infov("etcdContainerWithTlsUserAuth endpoint: {0}:{1}", buildEtcdHost(etcdContainerWithTlsUserAuth),
+         buildEtcdPort(etcdContainerWithTlsUserAuth));
       Map<String, String> conf = new HashMap<>();
+      // -- clientNoTlsNoAuth --
       conf.put("quarkus.etcd.clientNoTlsNoAuth.host", buildEtcdHost(etcdContainerNoTlsNoAuth));
       conf.put("quarkus.etcd.clientNoTlsNoAuth.port", String.valueOf(buildEtcdPort(etcdContainerNoTlsNoAuth)));
+      // -- clientWithTlsCertAuth --
       conf.put("quarkus.etcd.clientWithTlsCertAuth.host", buildEtcdHost(etcdContainerWithTlsCertAuth));
       conf.put("quarkus.etcd.clientWithTlsCertAuth.port", String.valueOf(buildEtcdPort(etcdContainerWithTlsCertAuth)));
       conf.put("quarkus.etcd.clientWithTlsCertAuth.ssl-config.key-store.path", Path.of("target/client.keystore")
@@ -98,6 +134,15 @@ public class EtcdLifecycleManager implements QuarkusTestResourceLifecycleManager
          .toAbsolutePath()
          .toString());
       conf.put("quarkus.etcd.clientWithTlsCertAuth.sslConfig.trust-store.password", "123456");
+      // -- clientWithTlsUserAuth --
+      conf.put("quarkus.etcd.clientWithTlsUserAuth.host", buildEtcdHost(etcdContainerWithTlsUserAuth));
+      conf.put("quarkus.etcd.clientWithTlsUserAuth.port", String.valueOf(buildEtcdPort(etcdContainerWithTlsUserAuth)));
+      conf.put("quarkus.etcd.clientWithTlsUserAuth.name", "test_user");
+      conf.put("quarkus.etcd.clientWithTlsUserAuth.password", "test");
+      conf.put("quarkus.etcd.clientWithTlsUserAuth.ssl-config.trust-store.path", Path.of("target/server.keystore")
+         .toAbsolutePath()
+         .toString());
+      conf.put("quarkus.etcd.clientWithTlsUserAuth.sslConfig.trust-store.password", "123456");
       return conf;
    }
 
