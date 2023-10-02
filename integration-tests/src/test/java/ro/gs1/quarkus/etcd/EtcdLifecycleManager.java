@@ -133,7 +133,7 @@ public class EtcdLifecycleManager implements QuarkusTestResourceLifecycleManager
       conf.put("quarkus.etcd.clientWithTlsCertAuth.ssl-config.trust-store.path", Path.of("target/server.keystore")
          .toAbsolutePath()
          .toString());
-      conf.put("quarkus.etcd.clientWithTlsCertAuth.sslConfig.trust-store.password", "123456");
+      conf.put("quarkus.etcd.clientWithTlsCertAuth.ssl-config.trust-store.password", "123456");
       // -- clientWithTlsUserAuth --
       conf.put("quarkus.etcd.clientWithTlsUserAuth.host", buildEtcdHost(etcdContainerWithTlsUserAuth));
       conf.put("quarkus.etcd.clientWithTlsUserAuth.port", String.valueOf(buildEtcdPort(etcdContainerWithTlsUserAuth)));
@@ -142,7 +142,7 @@ public class EtcdLifecycleManager implements QuarkusTestResourceLifecycleManager
       conf.put("quarkus.etcd.clientWithTlsUserAuth.ssl-config.trust-store.path", Path.of("target/server.keystore")
          .toAbsolutePath()
          .toString());
-      conf.put("quarkus.etcd.clientWithTlsUserAuth.sslConfig.trust-store.password", "123456");
+      conf.put("quarkus.etcd.clientWithTlsUserAuth.ssl-config.trust-store.password", "123456");
       return conf;
    }
 
