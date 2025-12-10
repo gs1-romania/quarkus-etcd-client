@@ -4,7 +4,7 @@
    <parent>
       <groupId>ro.gs1</groupId>
       <artifactId>quarkus-etcd-client-parent</artifactId>
-      <version>0.4-SNAPSHOT</version>
+      <version>0.5-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
    <artifactId>quarkus-etcd-client-deployment</artifactId>
@@ -20,7 +20,7 @@
       </dependency>
       <dependency>
          <groupId>io.quarkus</groupId>
-         <artifactId>quarkus-resteasy-reactive-deployment</artifactId>
+         <artifactId>quarkus-rest-deployment</artifactId>
       </dependency>
       <dependency>
          <groupId>ro.gs1</groupId>
