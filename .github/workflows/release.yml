@@ -55,17 +55,21 @@ jobs:
           OSSRH_MAVEN_USERNAME: ${{ secrets.OSSRH_MAVEN_USERNAME }}
           OSSRH_MAVEN_PASSWORD: ${{ secrets.OSSRH_MAVEN_PASSWORD }}
 
-      - name: Push changes to ${{ github.event.inputs.branch }}
-        uses: ad-m/github-push-action@v0.6.0
-        if: steps.release.outcome == 'success'
-        with:
-          github_token: ${{ github.token }}
-          branch: ${{ github.event.inputs.branch }}
-
-      - name: Push tags
+      - name: Push release branch and tags
         uses: ad-m/github-push-action@v0.6.0
         if: steps.release.outcome == 'success'
         with:
           github_token: ${{ github.token }}
           tags: true
-          branch: ${{ github.event.inputs.branch }}
+          branch: release-${{ github.event.inputs.releaseVersion }}
+
+      - name: Open pull request to ${{ github.event.inputs.branch }}
+        if: steps.release.outcome == 'success'
+        run: |
+          gh pr create \
+            --title "Release ${{ github.event.inputs.releaseVersion }}" \
+            --body "Merges release commits and bumps development version to ${{ github.event.inputs.developmentVersion }}." \
+            --head release-${{ github.event.inputs.releaseVersion }} \
+            --base ${{ github.event.inputs.branch }}
+        env:
+          GH_TOKEN: ${{ github.token }}
