@@ -46,7 +46,7 @@
       <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
       <quarkus.platform.version>3.31.4</quarkus.platform.version>
       <protobuf.maven.plugin.version>0.6.1</protobuf.maven.plugin.version>
-      <surefire-plugin.version>3.5.0</surefire-plugin.version>
+      <surefire-plugin.version>3.5.4</surefire-plugin.version>
       <grpc.version>1.47.0</grpc.version>
       <protoc.version>3.21.2</protoc.version>
       <os.maven.plugin.version>1.7.1</os.maven.plugin.version>
@@ -68,7 +68,7 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.8</version>
             <executions>
                <execution>
                   <id>sign-artifacts</id>
@@ -85,7 +85,7 @@
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-source-plugin</artifactId>
-               <version>3.3.0</version>
+               <version>3.4.0</version>
                <executions>
                   <execution>
                      <id>attach-sources</id>
@@ -113,7 +113,7 @@
             </plugin>
             <plugin>
                <artifactId>maven-release-plugin</artifactId>
-               <version>3.0.1</version>
+               <version>3.3.0</version>
                <configuration>
                   <scmCommentPrefix>[ci skip]</scmCommentPrefix>
                </configuration>
