@@ -38,7 +38,7 @@
    </scm>
    <properties>
       <compiler-plugin.version>3.13.0</compiler-plugin.version>
-      <failsafe-plugin.version>3.5.0</failsafe-plugin.version>
+      <failsafe-plugin.version>3.5.5</failsafe-plugin.version>
       <maven.compiler.release>17</maven.compiler.release>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
