@@ -6,10 +6,9 @@ import io.quarkus.arc.deployment.SyntheticBeanBuildItem;
 import io.quarkus.arc.processor.InjectionPointInfo;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.annotations.ExecutionTime;
+import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
-import io.quarkus.gizmo.MethodCreator;
-import io.quarkus.gizmo.MethodDescriptor;
-import io.quarkus.gizmo.ResultHandle;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.spi.DeploymentException;
 import org.jboss.jandex.AnnotationInstance;
@@ -18,7 +17,7 @@ import org.jboss.jandex.DotName;
 import ro.gs1.quarkus.etcd.api.EtcdClient;
 import ro.gs1.quarkus.etcd.api.EtcdClientChannel;
 import ro.gs1.quarkus.etcd.runtime.EtcdClientDestroyer;
-import ro.gs1.quarkus.etcd.runtime.EtcdClientFactory;
+import ro.gs1.quarkus.etcd.runtime.EtcdClientRecorder;
 import ro.gs1.quarkus.etcd.runtime.config.EtcdConfigProvider;
 
 import java.util.HashSet;
@@ -38,8 +37,10 @@ class EtcdClientProcessor {
    }
 
    @BuildStep
+   @Record(ExecutionTime.RUNTIME_INIT)
    void generateEtcdClientProducers(BeanDiscoveryFinishedBuildItem beanDiscovery,
-      BuildProducer<SyntheticBeanBuildItem> syntheticBeans, BuildProducer<FeatureBuildItem> features) {
+      BuildProducer<SyntheticBeanBuildItem> syntheticBeans, BuildProducer<FeatureBuildItem> features,
+      EtcdClientRecorder recorder) {
       Set<String> clients = new HashSet<>();
       for (InjectionPointInfo injectionPoint : beanDiscovery.getInjectionPoints()) {
          AnnotationInstance clientAnnotation = injectionPoint.getRequiredQualifier(
@@ -65,20 +66,12 @@ class EtcdClientProcessor {
                .scope(ApplicationScoped.class)
                .unremovable()
                .forceApplicationClass()
-               .creator(mc -> EtcdClientProcessor.this.generateChannelProducer(mc, client))
+               .setRuntimeInit()
+               .supplier(recorder.createClientSupplier(client))
                .destroyer(EtcdClientDestroyer.class);
             syntheticBeans.produce(configurator.done());
          }
          features.produce(new FeatureBuildItem(FEATURE));
       }
-   }
-
-   private void generateChannelProducer(MethodCreator mc, String clientName) {
-      ResultHandle name = mc.load(clientName);
-      ResultHandle result = mc.invokeStaticMethod(
-         MethodDescriptor.ofMethod(EtcdClientFactory.class, "createClient", EtcdClientChannel.class, String.class),
-         name);
-      mc.returnValue(result);
-      mc.close();
    }
 }

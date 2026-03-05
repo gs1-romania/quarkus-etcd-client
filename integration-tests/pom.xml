@@ -4,7 +4,7 @@
    <parent>
       <groupId>ro.gs1</groupId>
       <artifactId>quarkus-etcd-client-parent</artifactId>
-      <version>0.5-SNAPSHOT</version>
+      <version>0.6-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
    <artifactId>quarkus-etcd-client-integration-tests</artifactId>
@@ -27,6 +27,7 @@
       <dependency>
          <groupId>org.testcontainers</groupId>
          <artifactId>junit-jupiter</artifactId>
+         <version>1.21.4</version>
          <scope>test</scope>
       </dependency>
       <dependency>

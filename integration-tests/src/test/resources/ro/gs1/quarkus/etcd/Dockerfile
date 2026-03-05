@@ -1,4 +1,4 @@
-FROM gcr.io/etcd-development/etcd:v3.4.27
+FROM gcr.io/etcd-development/etcd:v3.6.8
 
 COPY server.crt /etc/ssl/etcd/certificate.crt
 COPY server.key /etc/ssl/etcd/private-key.key

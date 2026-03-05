@@ -62,7 +62,7 @@ public class EtcdLifecycleManager implements QuarkusTestResourceLifecycleManager
          throw new RuntimeException(e);
       }
       containerNetworkId.ifPresent(id -> logger.debugv("Network id: {0}", id));
-      etcdContainerNoTlsNoAuth = new GenericContainer<>("gcr.io/etcd-development/etcd:v3.4.27").withExposedPorts(
+      etcdContainerNoTlsNoAuth = new GenericContainer<>("gcr.io/etcd-development/etcd:v3.6.8").withExposedPorts(
             ETCD_PORT)
          .withCommand("/usr/local/bin/etcd", "--name", "etcd0", "--advertise-client-urls", "http://0.0.0.0:2379",
             "--listen-client-urls", "http://0.0.0.0:2379")

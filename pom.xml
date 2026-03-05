@@ -3,7 +3,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>ro.gs1</groupId>
    <artifactId>quarkus-etcd-client-parent</artifactId>
-   <version>0.5-SNAPSHOT</version>
+   <version>0.6-SNAPSHOT</version>
    <packaging>pom</packaging>
    <name>Quarkus - etcd Client - Parent</name>
    <description>A Quarkus etcd client extension.</description>
@@ -44,7 +44,7 @@
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
       <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
       <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-      <quarkus.platform.version>3.17.5</quarkus.platform.version>
+      <quarkus.platform.version>3.31.4</quarkus.platform.version>
       <protobuf.maven.plugin.version>0.6.1</protobuf.maven.plugin.version>
       <surefire-plugin.version>3.5.0</surefire-plugin.version>
       <grpc.version>1.47.0</grpc.version>
